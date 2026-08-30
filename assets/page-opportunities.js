@@ -18,7 +18,7 @@ function render() {
   $("#main").innerHTML = `
   <div class="stack" style="gap:26px">
     <div class="card">
-      <span class="eyebrow-plain">Add an opportunity</span>
+      <span class="eyebrow">Add an opportunity</span>
       <p class="small muted" style="margin:6px 0 16px;max-width:640px">
         Open federal opportunities are pulled in for you automatically each day. Add anything else
         you find here &mdash; local community foundations, corporate giving, or a funder someone
