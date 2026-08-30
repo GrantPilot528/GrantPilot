@@ -35,22 +35,6 @@ function inviteBanner() {
     added automatically.</div>`;
 }
 
-/* Photo slots fill themselves if a file exists in assets/photos. */
-function photo(name, label, cls) {
-  return `<div class="ph ${cls}" data-label="${label}" data-photo="${name}"></div>`;
-}
-function loadPhotos() {
-  $$("[data-photo]").forEach(el => {
-    const src = "assets/photos/" + el.dataset.photo;
-    const img = new Image();
-    img.onload = () => {
-      el.style.backgroundImage = "url('" + src + "')";
-      el.classList.add("filled");
-    };
-    img.src = src;
-  });
-}
-
 /* ------------------------------- layout -------------------------------- */
 
 function shell(panel) {
@@ -60,31 +44,63 @@ function shell(panel) {
       <a href="index.html" class="brand">
         <img src="assets/logo.png" alt="Grant Pilot" onerror="gpWordmark(this)">
       </a>
-      <a href="#how" class="navlink hide-sm">How it works</a>
       <a href="#what" class="navlink hide-sm">What you get</a>
+      <a href="#how" class="navlink hide-sm">How it works</a>
       <div class="spacer"></div>
       <a href="#start" class="btn btn-primary">Sign in</a>
     </div>
   </nav>
 
-  <section class="section" style="padding-top:56px">
+  <section class="top" id="start">
     <div class="wrap">
-      <div class="mosaic">
-        <div class="col">
-          ${photo("hero-1.jpg", "Photo &mdash; your team at work", "short")}
-          ${photo("hero-3.jpg", "Photo &mdash; your programs", "tall")}
-        </div>
-        <div class="col">
-          ${photo("hero-2.jpg", "Photo &mdash; someone from your team", "tall")}
-        </div>
-        <div class="copy">
-          <h1>Funding that fits, found for you.</h1>
+      <div class="top-grid">
+        <div>
+          <span class="kicker">For small nonprofit teams</span>
+          <h1>Funding that fits, <b>found for you.</b></h1>
           <p class="lead">Grant Pilot searches open opportunities every day, ranks them against
-            what your organization actually does, and hands each person a short list. Your
-            standing answers stay in one place. Every deadline stays visible.</p>
-          <div class="ctarow">
-            <a href="#start" class="btn btn-primary">Create an account</a>
-            <a href="#how" class="btn">See how it works</a>
+            what your organization actually does, and hands each person a short list. Your standing
+            answers stay in one place. Every deadline stays visible.</p>
+        </div>
+        <div class="authcard" style="border:1px solid var(--line)">${panel}</div>
+      </div>
+
+      <div class="tiles">
+        <div class="tile navy">
+          <div class="tlabel">Today's short list</div>
+          <div class="stack-col">
+            <div class="mini">
+              <div class="t">Community Mental Health Services Block Grant</div>
+              <div class="m">Health and Human Services</div>
+              <div class="m due">42 days left</div>
+            </div>
+            <div class="mini">
+              <div class="t">Rural Health Care Outreach</div>
+              <div class="m">Health Resources and Services Administration</div>
+              <div class="m due">28 days left</div>
+            </div>
+            <div class="mini">
+              <div class="t">Community Services Block Grant</div>
+              <div class="m">Office of Community Services</div>
+              <div class="m due">61 days left</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stack-col" style="display:grid;gap:20px">
+          <div class="tile teal">
+            <div class="tlabel">Goal pace</div>
+            <div class="big">8 / 15</div>
+            <div class="bar"><i style="width:53%"></i></div>
+            <div class="cap">On pace. Seven more submissions in 123 days.</div>
+          </div>
+          <div class="tile mist">
+            <div class="tlabel">Reusable answers</div>
+            <div class="stack-col">
+              <div class="mini"><div class="t">Mission statement</div>
+                <div class="m due">Copied</div></div>
+              <div class="mini"><div class="t">Statement of need</div>
+                <div class="m">Updated last week</div></div>
+            </div>
           </div>
         </div>
       </div>
@@ -96,41 +112,38 @@ function shell(panel) {
       <div class="grid">
         <div>
           <h2>Built for the two people doing everything</h2>
-          <p class="intro">Small teams lose grant hours to searching, retyping, and finding out
-            in week ten that nobody was on pace. Grant Pilot removes all three.</p>
+          <p class="intro">Small teams lose grant hours to searching, retyping, and finding out in
+            week ten that nobody was on pace. Grant Pilot removes all three.</p>
         </div>
-        <div class="figure">
-          <b>5</b>
-          <span>Ranked opportunities waiting for each person, every morning, with no one going looking</span>
-        </div>
-        <div class="figure">
-          <b>1</b>
-          <span>Place your mission, need statement, and outcomes live, copied into any form in a click</span>
-        </div>
+        <div class="figure"><b>5</b>
+          <span>Ranked opportunities waiting for each person every morning, with nobody going looking</span></div>
+        <div class="figure"><b>1</b>
+          <span>Place your mission, need statement, and outcomes live, copied into any form in a click</span></div>
         <div class="rule"></div>
-        <div class="figure">
-          <b>0</b>
-          <span>Duplicate applications. Claiming an opportunity takes it off everyone else's list</span>
-        </div>
-        <div class="figure">
-          <b>30</b>
-          <span>Days of upcoming deadlines visible to admins, with who owns each one</span>
-        </div>
+        <div class="figure"><b>0</b>
+          <span>Duplicate applications. Claiming an opportunity takes it off everyone else's list</span></div>
+        <div class="figure"><b>30</b>
+          <span>Days of upcoming deadlines visible to admins, with who owns each one</span></div>
       </div>
     </div>
   </section>
 
   <section class="split">
-    <div class="pane">
-      <h2>Opportunities come to you</h2>
-      <p>Open federal funding is searched daily against your mission and each writer's focus
-        areas, then ranked with a one-line reason and a flag when eligibility needs checking.
-        Foundation prospects you find yourself get added the same way and ranked alongside.</p>
-      <div class="ctarow">
-        <a href="#start" class="btn btn-primary">Get started</a>
-      </div>
+    <div class="pane mist">
+      <div class="eyebrow">Discovery</div>
+      <h2 style="margin-top:10px">Opportunities come to you</h2>
+      <p>Open federal funding is searched daily against your mission and each writer's focus areas,
+        then ranked with a one-line reason and a flag when eligibility needs checking. Foundation
+        prospects you find yourself get added the same way and ranked alongside.</p>
+      <div class="ctarow"><a href="#start" class="btn btn-primary">Get started</a></div>
     </div>
-    ${photo("cta.jpg", "Photo &mdash; where your work happens", "shot")}
+    <div class="pane tealwash">
+      <div class="eyebrow">Accountability</div>
+      <h2 style="margin-top:10px">Groups, goals, and an honest pace line</h2>
+      <p>Sort your team into groups you name yourself. Each group shows what its members have in
+        progress, submitted, and won. The pace marker shows where a steady schedule would have put
+        someone today, so behind surfaces in week two instead of week ten.</p>
+    </div>
   </section>
 
   <section class="section" id="how">
@@ -154,20 +167,6 @@ function shell(panel) {
           <h3>Work the short list</h3>
           <p>Claim what fits, move it through drafting to submitted, watch the pace line.</p>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section ctaband" id="start">
-    <div class="wrap">
-      <div class="hero-grid">
-        <div>
-          <div class="eyebrow">Get started</div>
-          <h2 style="margin-top:10px;max-width:16ch">Set it up once, in about ten minutes</h2>
-          <p class="lead" style="margin-top:18px;max-width:44ch">Create an organization or join
-            your team with an invite link. Nothing to install.</p>
-        </div>
-        <div class="authcard" style="border:1px solid var(--line)">${panel}</div>
       </div>
     </div>
   </section>
@@ -246,14 +245,11 @@ function setupPanel(mode) {
 
 /* ------------------------------- behavior ------------------------------ */
 
-function mountAuth(tab) { $("#page").innerHTML = shell(authPanel(tab)); loadPhotos(); wireAuth(); }
-function mountSetup(mode) { $("#page").innerHTML = shell(setupPanel(mode)); loadPhotos(); wireSetup(); }
+function mountAuth(tab) { $("#page").innerHTML = shell(authPanel(tab)); wireAuth(); }
+function mountSetup(mode) { $("#page").innerHTML = shell(setupPanel(mode)); wireSetup(); }
 
 function wireAuth() {
-  $$("[data-tab]").forEach(b => b.onclick = () => {
-    mountAuth(b.dataset.tab);
-    document.getElementById("start").scrollIntoView({ block: "center" });
-  });
+  $$("[data-tab]").forEach(b => b.onclick = () => mountAuth(b.dataset.tab));
 
   const signin = $("#do-signin");
   if (signin) signin.onclick = async () => {
@@ -280,15 +276,11 @@ function wireAuth() {
     sessionStorage.setItem("gp:name", full_name);
     if (!data.session) return toast("Account created. Check your email to confirm, then sign in.");
     mountSetup(pendingJoin() ? "join" : "create");
-    document.getElementById("start").scrollIntoView({ block: "center" });
   };
 }
 
 function wireSetup() {
-  $$("[data-setup]").forEach(b => b.onclick = () => {
-    mountSetup(b.dataset.setup);
-    document.getElementById("start").scrollIntoView({ block: "center" });
-  });
+  $$("[data-setup]").forEach(b => b.onclick = () => mountSetup(b.dataset.setup));
   const remembered = sessionStorage.getItem("gp:name") || "";
   if ($("#c-name") && !$("#c-name").value) $("#c-name").value = remembered;
   if ($("#j-name") && !$("#j-name").value) $("#j-name").value = remembered;
@@ -326,11 +318,7 @@ async function route() {
   if (!CONFIGURED) { document.body.innerHTML = notConfiguredHTML(); return; }
   const res = await loadSession();
   if (res.state === "ready") { location.href = "dashboard.html"; return; }
-  if (res.state === "needs-org") {
-    mountSetup(pendingJoin() ? "join" : "create");
-    document.getElementById("start").scrollIntoView({ block: "center" });
-    return;
-  }
+  if (res.state === "needs-org") { mountSetup(pendingJoin() ? "join" : "create"); return; }
   mountAuth(pendingJoin() || location.hash === "#register" ? "register" : "signin");
 }
 
