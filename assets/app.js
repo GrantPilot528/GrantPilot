@@ -200,27 +200,28 @@ const NAV_ITEMS = [
 ];
 
 function renderShell(activeHref) {
-  const links = NAV_ITEMS.map(n =>
+  const tabs = NAV_ITEMS.map(n =>
     `<a href="${n.href}" class="${n.href === activeHref ? "active" : ""}">${n.label}</a>`).join("");
 
   return `
-  <header class="nav"><div class="wrap nav-inner">
-    <a class="logo" href="dashboard.html">${logoHTML()}</a>
-    <nav class="nav-links">${links}</nav>
-    <div class="nav-right">
-      <span class="nav-org">${esc(GP.org.name || "Organization")}</span>
-      <span class="nav-user">${esc(GP.profile.full_name)}${isAdmin() ? " &middot; admin" : ""}</span>
-      <button class="btn btn-sm btn-ghost" onclick="signOut()">Sign out</button>
+  <header class="appbar">
+    <div class="wrap">
+      <div class="row1">
+        <a class="brand" href="dashboard.html">
+          <img src="assets/logo.png" alt="Grant Pilot" onerror="gpWordmark(this)">
+        </a>
+        <span class="org">${esc(GP.org.name || "Your organization")}</span>
+        <div class="spacer"></div>
+        <span class="who"><b>${esc(GP.profile.full_name)}</b>${isAdmin() ? " &middot; admin" : ""}</span>
+        <button class="signout" onclick="signOut()">Sign out</button>
+      </div>
+      <nav class="apptabs">${tabs}</nav>
     </div>
-  </div></header>
-
-  <main class="wrap" id="main" style="padding-top:34px;padding-bottom:56px"></main>
-
+  </header>
+  <main class="wrap" id="main" style="padding-top:34px"></main>
   <footer class="site"><div class="wrap">
-    <div class="legal" style="margin-top:0;border-top:0;padding-top:0">
-      Grant Pilot helps you find, organize, and reuse your grant work. It does not submit
-      applications and does not confirm eligibility &mdash; always read the funder's own guidelines.
-    </div>
+    Grant Pilot helps you find, organize, and reuse your grant work. It does not submit applications
+    and does not confirm that your organization is eligible &mdash; always read the funder's own guidelines.
   </div></footer>`;
 }
 
