@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Grant Pilot — grant discovery and tracking for nonprofits</title>
+<meta name="description" content="Grant Pilot finds funding that fits your nonprofit, keeps your standing answers in one place, and shows every application and deadline across your team.">
+<link rel="icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/theme.css">
+</head>
+<body>
+
+<div id="page"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/config.js"></script>
+<script src="assets/app.js"></script>
+<script>
+/* --------------------------- invite handling --------------------------- */
+
+(function captureInvite() {
+  const code = new URLSearchParams(location.search).get("join");
+  if (code) sessionStorage.setItem("gp:join", code.trim().toUpperCase());
+})();
+const pendingJoin = () => sessionStorage.getItem("gp:join");
+const clearJoin = () => sessionStorage.removeItem("gp:join");
+
+function inviteBanner() {
+  if (!pendingJoin()) return "";
+  return `<div class="notice teal" style="margin-bottom:20px">
+    <strong>You have been invited to join a team.</strong> Create an account and you will be
+    added automatically.</div>`;
+}
+
+/* ------------------------------- layout -------------------------------- */
+
+function shell(panel) {
+  return `
+  <nav class="sitenav">
+    <div class="wrap">
+      <a href="index.html" class="brand">
+        <img src="assets/logo.png" alt="Grant Pilot" onerror="gpWordmark(this)">
+      </a>
+      <div class="links">
+        <a href="#how" class="hide-sm">How it works</a>
+        <a href="#what" class="hide-sm">What you get</a>
+        <a href="#start" class="btn btn-ghost btn-sm">Sign in</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero" id="start">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div>
+          <span class="kicker">For small nonprofit teams</span>
+          <h1>Funding that fits, <b>found for you.</b></h1>
+          <p class="lead">Grant Pilot searches open opportunities every day, ranks them against
+            what your organization actually does, and hands each person a short list. Your standing
+            answers stay in one place. Every deadline stays visible.</p>
+        </div>
+        <div class="authcard">${panel}</div>
+      </div>
+    </div>
+  </header>
+
+  <section class="section" id="what">
+    <div class="wrap">
+      <div class="eyebrow">What you get</div>
+      <h2 style="margin-top:10px;max-width:20ch">Built for the two people doing everything</h2>
+      <div class="featgrid">
+        <div class="feature">
+          <div class="num">01</div>
+          <h3>Opportunities come to you</h3>
+          <p>Open federal funding is searched daily and matched to your mission and each
+             writer's focus areas. No one has to go hunting.</p>
+        </div>
+        <div class="feature">
+          <div class="num">02</div>
+          <h3>Write once, paste everywhere</h3>
+          <p>Mission, need statement, outcomes, budget, contact block. Kept current in one
+             place and copied into any funder's form in a click.</p>
+        </div>
+        <div class="feature">
+          <div class="num">03</div>
+          <h3>Groups and goals</h3>
+          <p>Sort your team into groups you name yourself. See what each group has submitted,
+             who is on pace, and what is due next.</p>
+        </div>
+        <div class="feature">
+          <div class="num">04</div>
+          <h3>No duplicated work</h3>
+          <p>Claiming an opportunity takes it off everyone else's list. Two people never
+             write the same application by accident.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section band" id="how">
+    <div class="wrap">
+      <div class="eyebrow">How it works</div>
+      <h2 style="margin-top:10px">Four steps, then it runs itself</h2>
+      <div class="steps">
+        <div class="step">
+          <h3>Create your organization</h3>
+          <p>One person signs up and becomes the administrator. Everyone else joins with a link.</p>
+        </div>
+        <div class="step">
+          <h3>Fill in your answers</h3>
+          <p>Mission, need statement, outcomes. This is what the search uses to judge fit.</p>
+        </div>
+        <div class="step">
+          <h3>Set focus areas and groups</h3>
+          <p>Each person gets their own service area and interests. Suggestions follow from there.</p>
+        </div>
+        <div class="step">
+          <h3>Work the short list</h3>
+          <p>Claim what fits, move it through drafting to submitted, watch the pace line.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site">
+    <div class="wrap">
+      Grant Pilot helps you find, organize, and reuse your grant work. It does not submit
+      applications and does not confirm that your organization is eligible. Always read the
+      funder's own guidelines before you apply.
+    </div>
+  </footer>`;
+}
+
+/* -------------------------------- panels ------------------------------- */
+
+function authPanel(tab) {
+  const t = tab || "signin";
+  const tabs = inviteBanner() + `<div class="authtabs">
+    <button class="${t === "signin" ? "active" : ""}" data-tab="signin">Sign in</button>
+    <button class="${t === "register" ? "active" : ""}" data-tab="register">Create account</button>
+  </div>`;
+
+  if (t === "register") {
+    return tabs + `
+      <div class="field"><label class="lbl">Your name</label>
+        <input class="f" id="r-name" autocomplete="name"></div>
+      <div class="field"><label class="lbl">Work email</label>
+        <input class="f" id="r-email" type="email" autocomplete="email"></div>
+      <div class="field"><label class="lbl">Password</label>
+        <div class="hint">At least 8 characters.</div>
+        <input class="f" id="r-pass" type="password" autocomplete="new-password"></div>
+      <button class="btn btn-primary btn-block" id="do-register">Create account</button>
+      <p class="tiny muted" style="margin:14px 0 0;text-align:center">
+        You will set up or join an organization next.</p>`;
+  }
+
+  return tabs + `
+    <div class="field"><label class="lbl">Email</label>
+      <input class="f" id="s-email" type="email" autocomplete="email"></div>
+    <div class="field"><label class="lbl">Password</label>
+      <input class="f" id="s-pass" type="password" autocomplete="current-password"></div>
+    <button class="btn btn-primary btn-block" id="do-signin">Sign in</button>`;
+}
+
+function setupPanel(mode) {
+  const invited = pendingJoin();
+  const m = mode || (invited ? "join" : "create");
+  const tabs = inviteBanner() + `<div class="authtabs">
+    <button class="${m === "join" ? "active" : ""}" data-setup="join">Join a team</button>
+    <button class="${m === "create" ? "active" : ""}" data-setup="create">Start an organization</button>
+  </div>`;
+
+  if (m === "join") {
+    return tabs + `
+      <div class="field"><label class="lbl">Team code</label>
+        <div class="hint">${invited ? "Filled in from your invite link."
+          : "Your administrator can find this on the Team page."}</div>
+        <input class="f" id="j-code" placeholder="ABCD1234" value="${invited || ""}"></div>
+      <div class="field"><label class="lbl">Your name</label><input class="f" id="j-name"></div>
+      <div class="field"><label class="lbl">Your ZIP code</label>
+        <div class="hint">Used to flag opportunities limited to areas you do not serve.</div>
+        <input class="f" id="j-zip" inputmode="numeric" maxlength="10"></div>
+      <button class="btn btn-primary btn-block" id="do-join">Join the team</button>`;
+  }
+
+  return tabs + `
+    <div class="field"><label class="lbl">Organization name</label><input class="f" id="c-org"></div>
+    <div class="field"><label class="lbl">Your name</label><input class="f" id="c-name"></div>
+    <div class="field"><label class="lbl">Organization ZIP code</label>
+      <div class="hint">Where you are based. Each person can have their own ZIP later.</div>
+      <input class="f" id="c-zip" inputmode="numeric" maxlength="10"></div>
+    <button class="btn btn-primary btn-block" id="do-create">Create organization</button>
+    <p class="tiny muted" style="margin:14px 0 0;text-align:center">
+      You become the administrator and get a link to invite everyone else.</p>`;
+}
+
+/* ------------------------------- behavior ------------------------------ */
+
+function mountAuth(tab) { $("#page").innerHTML = shell(authPanel(tab)); wireAuth(); }
+function mountSetup(mode) { $("#page").innerHTML = shell(setupPanel(mode)); wireSetup(); }
+
+function wireAuth() {
+  $$("[data-tab]").forEach(b => b.onclick = () => mountAuth(b.dataset.tab));
+
+  const signin = $("#do-signin");
+  if (signin) signin.onclick = async () => {
+    const email = $("#s-email").value.trim(), password = $("#s-pass").value;
+    if (!email || !password) return toast("Enter your email and password", true);
+    signin.disabled = true;
+    const { error } = await sb.auth.signInWithPassword({ email, password });
+    signin.disabled = false;
+    if (error) return toast(error.message, true);
+    route();
+  };
+
+  const reg = $("#do-register");
+  if (reg) reg.onclick = async () => {
+    const full_name = $("#r-name").value.trim();
+    const email = $("#r-email").value.trim();
+    const password = $("#r-pass").value;
+    if (!full_name || !email || password.length < 8)
+      return toast("Fill in every field. Passwords need 8 characters.", true);
+    reg.disabled = true;
+    const { data, error } = await sb.auth.signUp({ email, password, options: { data: { full_name } } });
+    reg.disabled = false;
+    if (error) return toast(error.message, true);
+    sessionStorage.setItem("gp:name", full_name);
+    if (!data.session) return toast("Account created. Check your email to confirm, then sign in.");
+    mountSetup(pendingJoin() ? "join" : "create");
+  };
+}
+
+function wireSetup() {
+  $$("[data-setup]").forEach(b => b.onclick = () => mountSetup(b.dataset.setup));
+  const remembered = sessionStorage.getItem("gp:name") || "";
+  if ($("#c-name") && !$("#c-name").value) $("#c-name").value = remembered;
+  if ($("#j-name") && !$("#j-name").value) $("#j-name").value = remembered;
+
+  const create = $("#do-create");
+  if (create) create.onclick = async () => {
+    const name = $("#c-org").value.trim();
+    const full = $("#c-name").value.trim();
+    if (!name || !full) return toast("Organization name and your name are required", true);
+    create.disabled = true;
+    const { error } = await sb.rpc("create_org",
+      { p_org_name: name, p_full_name: full, p_zip: $("#c-zip").value.trim() });
+    create.disabled = false;
+    if (error) return toast(error.message, true);
+    clearJoin();
+    location.href = "dashboard.html";
+  };
+
+  const join = $("#do-join");
+  if (join) join.onclick = async () => {
+    const code = $("#j-code").value.trim().toUpperCase();
+    const full = $("#j-name").value.trim();
+    if (!code || !full) return toast("Team code and your name are required", true);
+    join.disabled = true;
+    const { error } = await sb.rpc("join_org",
+      { p_code: code, p_full_name: full, p_zip: $("#j-zip").value.trim() });
+    join.disabled = false;
+    if (error) return toast(error.message, true);
+    clearJoin();
+    location.href = "dashboard.html";
+  };
+}
+
+async function route() {
+  if (!CONFIGURED) { document.body.innerHTML = notConfiguredHTML(); return; }
+  const res = await loadSession();
+  if (res.state === "ready") { location.href = "dashboard.html"; return; }
+  if (res.state === "needs-org") { mountSetup(pendingJoin() ? "join" : "create"); return; }
+  mountAuth(pendingJoin() || location.hash === "#register" ? "register" : "signin");
+}
+
+route();
+</script>
+</body>
+</html>
