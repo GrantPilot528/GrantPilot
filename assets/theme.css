@@ -313,3 +313,41 @@ footer.site a { color: var(--ink-70); }
                             .split .pane h2 { font-size: 25px; } }
 
 .ctarow { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+
+/* =====================================================================
+   Signed-in shell — same aesthetic as the marketing page:
+   white bar, navy logo, teal active state.
+   ===================================================================== */
+
+.appbar { background: #fff; border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 50; }
+.appbar .row1 { display: flex; align-items: center; gap: 20px; padding: 14px 0 12px; }
+.appbar .brand img { height: 38px; display: block; }
+.appbar .brand-fallback { color: var(--navy); font-size: 21px; }
+.appbar .spacer { flex: 1; }
+.appbar .org { font-size: 12.5px; font-weight: 700; color: var(--teal-deep);
+               background: var(--teal-tint); border-radius: 999px; padding: 6px 13px; white-space: nowrap; }
+.appbar .who { font-size: 13.5px; color: var(--ink-70); white-space: nowrap; }
+.appbar .who b { color: var(--ink); font-weight: 600; }
+.appbar .signout { font-size: 13px; font-weight: 600; color: var(--ink-70); background: #fff;
+                   border: 1px solid var(--line-2); border-radius: 999px; padding: 8px 15px; cursor: pointer; }
+.appbar .signout:hover { border-color: var(--ink-45); color: var(--ink); }
+
+.apptabs { display: flex; gap: 4px; flex-wrap: wrap; padding-bottom: 10px; }
+.apptabs a { font-size: 14px; font-weight: 600; color: var(--ink-70); padding: 9px 15px; border-radius: 999px; }
+.apptabs a:hover { background: var(--paper-2); color: var(--ink); text-decoration: none; }
+.apptabs a.active { background: var(--navy); color: #fff; }
+
+@media (max-width: 720px) {
+  .appbar .row1 { flex-wrap: wrap; gap: 12px; }
+  .appbar .who { width: 100%; order: 3; }
+  .appbar .brand img { height: 32px; }
+  .apptabs { gap: 2px; }
+  .apptabs a { font-size: 13px; padding: 8px 12px; }
+}
+
+/* page heading block, matching the marketing type scale */
+.pagehead { display: flex; justify-content: space-between; align-items: flex-end;
+            gap: 24px; flex-wrap: wrap; margin-bottom: 6px; }
+.pagehead h2 { font-size: 30px; margin-top: 6px; }
+.pagehead .figures { display: flex; gap: 30px; }
+@media (max-width: 620px) { .pagehead h2 { font-size: 24px; } .pagehead .figures { gap: 20px; } }
