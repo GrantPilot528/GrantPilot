@@ -14,7 +14,7 @@ function render() {
   $("#main").innerHTML = `
   <div class="stack" style="gap:26px">
     <div>
-      <span class="eyebrow-plain">Write once, paste everywhere</span>
+      <span class="eyebrow">Write once, paste everywhere</span>
       <h2 style="font-size:26px;margin:8px 0 10px">${esc(GP.org.name || "Your organization")}'s standing answers</h2>
       <p class="lead" style="font-size:15px;margin:0;max-width:680px">
         These are the answers nearly every application asks for. Copy one into the funder's form,
@@ -34,7 +34,7 @@ function render() {
     </div>
 
     <div class="card">
-      <span class="eyebrow-plain">Your own block</span>
+      <span class="eyebrow">Your own block</span>
       <div style="height:12px"></div>
       <div class="field">
         <div class="field-head">
