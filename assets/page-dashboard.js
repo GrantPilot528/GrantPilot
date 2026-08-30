@@ -59,13 +59,13 @@ function render() {
   $("#main").innerHTML = `
   <div class="stack">
 
-    <div class="between" style="align-items:flex-end">
+    <div class="pagehead">
       <div>
         <div class="eyebrow">${fmtDate(todayISO())}</div>
-        <h2 style="margin-top:6px">Good to see you, ${esc(me.full_name.split(" ")[0])}</h2>
+        <h2>Good to see you, ${esc(me.full_name.split(" ")[0])}</h2>
         ${group ? `<p class="small muted" style="margin:6px 0 0">${esc(group.name)}</p>` : ""}
       </div>
-      <div class="row" style="gap:22px">
+      <div class="figures">
         <div class="stat"><b>${s.working}</b><span>In progress</span></div>
         <div class="stat"><b>${s.submitted}</b><span>Submitted</span></div>
         <div class="stat"><b>${s.awarded}</b><span>Awarded</span></div>
@@ -94,10 +94,10 @@ function render() {
     </div>
 
     <div>
-      <div class="between" style="align-items:flex-end;margin-bottom:16px">
+      <div class="pagehead" style="margin-bottom:18px">
         <div>
           <div class="eyebrow">Suggested for you</div>
-          <h2 style="margin-top:6px">Today's short list</h2>
+          <h2>Today's short list</h2>
           <p class="small muted" style="margin:6px 0 0;max-width:52ch">
             ${STATE === "loading" ? "Searching open federal opportunities and matching them to your work."
               : RANKED_BY === "ai" ? "Found and ranked against your mission. Nobody else on your team sees these five."
