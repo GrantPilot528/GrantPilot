@@ -34,12 +34,12 @@ function render() {
   $("#main").innerHTML = `
   <div class="stack">
 
-    <div class="between" style="align-items:flex-end">
+    <div class="pagehead">
       <div>
         <div class="eyebrow">Organization</div>
-        <h2 style="margin-top:6px">${esc(GP.org.name || "Your organization")}</h2>
+        <h2>${esc(GP.org.name || "Your organization")}</h2>
       </div>
-      <div class="row" style="gap:26px">
+      <div class="figures">
         <div class="stat"><b>${totals.pool}</b><span>Unclaimed</span></div>
         <div class="stat"><b>${totals.working}</b><span>In progress</span></div>
         <div class="stat"><b>${totals.submitted}</b><span>Submitted</span></div>
@@ -68,10 +68,10 @@ function render() {
     </div>` : ""}
 
     <div>
-      <div class="between" style="align-items:flex-end;margin-bottom:16px">
+      <div class="pagehead" style="margin-bottom:18px">
         <div>
           <div class="eyebrow">Groups</div>
-          <h2 style="margin-top:6px">Who is working on what</h2>
+          <h2>Who is working on what</h2>
         </div>
         ${admin ? `<div class="row" style="gap:8px">
           <input class="f" id="newgroup" placeholder="New group name" style="width:220px">
