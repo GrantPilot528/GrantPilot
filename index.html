@@ -35,72 +35,105 @@ function inviteBanner() {
     added automatically.</div>`;
 }
 
+/* Photo slots fill themselves if a file exists in assets/photos. */
+function photo(name, label, cls) {
+  return `<div class="ph ${cls}" data-label="${label}" data-photo="${name}"></div>`;
+}
+function loadPhotos() {
+  $$("[data-photo]").forEach(el => {
+    const src = "assets/photos/" + el.dataset.photo;
+    const img = new Image();
+    img.onload = () => {
+      el.style.backgroundImage = "url('" + src + "')";
+      el.classList.add("filled");
+    };
+    img.src = src;
+  });
+}
+
 /* ------------------------------- layout -------------------------------- */
 
 function shell(panel) {
   return `
-  <nav class="sitenav">
+  <nav class="mkt-nav">
     <div class="wrap">
       <a href="index.html" class="brand">
         <img src="assets/logo.png" alt="Grant Pilot" onerror="gpWordmark(this)">
       </a>
-      <div class="links">
-        <a href="#how" class="hide-sm">How it works</a>
-        <a href="#what" class="hide-sm">What you get</a>
-        <a href="#start" class="btn btn-ghost btn-sm">Sign in</a>
-      </div>
+      <a href="#how" class="navlink hide-sm">How it works</a>
+      <a href="#what" class="navlink hide-sm">What you get</a>
+      <div class="spacer"></div>
+      <a href="#start" class="btn btn-primary">Sign in</a>
     </div>
   </nav>
 
-  <header class="hero" id="start">
+  <section class="section" style="padding-top:56px">
     <div class="wrap">
-      <div class="hero-grid">
-        <div>
-          <span class="kicker">For small nonprofit teams</span>
-          <h1>Funding that fits, <b>found for you.</b></h1>
+      <div class="mosaic">
+        <div class="col">
+          ${photo("hero-1.jpg", "Photo &mdash; your team at work", "short")}
+          ${photo("hero-3.jpg", "Photo &mdash; your programs", "tall")}
+        </div>
+        <div class="col">
+          ${photo("hero-2.jpg", "Photo &mdash; someone from your team", "tall")}
+        </div>
+        <div class="copy">
+          <h1>Funding that fits, found for you.</h1>
           <p class="lead">Grant Pilot searches open opportunities every day, ranks them against
-            what your organization actually does, and hands each person a short list. Your standing
-            answers stay in one place. Every deadline stays visible.</p>
-        </div>
-        <div class="authcard">${panel}</div>
-      </div>
-    </div>
-  </header>
-
-  <section class="section" id="what">
-    <div class="wrap">
-      <div class="eyebrow">What you get</div>
-      <h2 style="margin-top:10px;max-width:20ch">Built for the two people doing everything</h2>
-      <div class="featgrid">
-        <div class="feature">
-          <div class="num">01</div>
-          <h3>Opportunities come to you</h3>
-          <p>Open federal funding is searched daily and matched to your mission and each
-             writer's focus areas. No one has to go hunting.</p>
-        </div>
-        <div class="feature">
-          <div class="num">02</div>
-          <h3>Write once, paste everywhere</h3>
-          <p>Mission, need statement, outcomes, budget, contact block. Kept current in one
-             place and copied into any funder's form in a click.</p>
-        </div>
-        <div class="feature">
-          <div class="num">03</div>
-          <h3>Groups and goals</h3>
-          <p>Sort your team into groups you name yourself. See what each group has submitted,
-             who is on pace, and what is due next.</p>
-        </div>
-        <div class="feature">
-          <div class="num">04</div>
-          <h3>No duplicated work</h3>
-          <p>Claiming an opportunity takes it off everyone else's list. Two people never
-             write the same application by accident.</p>
+            what your organization actually does, and hands each person a short list. Your
+            standing answers stay in one place. Every deadline stays visible.</p>
+          <div class="ctarow">
+            <a href="#start" class="btn btn-primary">Create an account</a>
+            <a href="#how" class="btn">See how it works</a>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section band" id="how">
+  <section class="statband" id="what">
+    <div class="wrap">
+      <div class="grid">
+        <div>
+          <h2>Built for the two people doing everything</h2>
+          <p class="intro">Small teams lose grant hours to searching, retyping, and finding out
+            in week ten that nobody was on pace. Grant Pilot removes all three.</p>
+        </div>
+        <div class="figure">
+          <b>5</b>
+          <span>Ranked opportunities waiting for each person, every morning, with no one going looking</span>
+        </div>
+        <div class="figure">
+          <b>1</b>
+          <span>Place your mission, need statement, and outcomes live, copied into any form in a click</span>
+        </div>
+        <div class="rule"></div>
+        <div class="figure">
+          <b>0</b>
+          <span>Duplicate applications. Claiming an opportunity takes it off everyone else's list</span>
+        </div>
+        <div class="figure">
+          <b>30</b>
+          <span>Days of upcoming deadlines visible to admins, with who owns each one</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="split">
+    <div class="pane">
+      <h2>Opportunities come to you</h2>
+      <p>Open federal funding is searched daily against your mission and each writer's focus
+        areas, then ranked with a one-line reason and a flag when eligibility needs checking.
+        Foundation prospects you find yourself get added the same way and ranked alongside.</p>
+      <div class="ctarow">
+        <a href="#start" class="btn btn-primary">Get started</a>
+      </div>
+    </div>
+    ${photo("cta.jpg", "Photo &mdash; where your work happens", "shot")}
+  </section>
+
+  <section class="section" id="how">
     <div class="wrap">
       <div class="eyebrow">How it works</div>
       <h2 style="margin-top:10px">Four steps, then it runs itself</h2>
@@ -121,6 +154,20 @@ function shell(panel) {
           <h3>Work the short list</h3>
           <p>Claim what fits, move it through drafting to submitted, watch the pace line.</p>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section ctaband" id="start">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow">Get started</div>
+          <h2 style="margin-top:10px;max-width:16ch">Set it up once, in about ten minutes</h2>
+          <p class="lead" style="margin-top:18px;max-width:44ch">Create an organization or join
+            your team with an invite link. Nothing to install.</p>
+        </div>
+        <div class="authcard" style="border:1px solid var(--line)">${panel}</div>
       </div>
     </div>
   </section>
@@ -199,11 +246,14 @@ function setupPanel(mode) {
 
 /* ------------------------------- behavior ------------------------------ */
 
-function mountAuth(tab) { $("#page").innerHTML = shell(authPanel(tab)); wireAuth(); }
-function mountSetup(mode) { $("#page").innerHTML = shell(setupPanel(mode)); wireSetup(); }
+function mountAuth(tab) { $("#page").innerHTML = shell(authPanel(tab)); loadPhotos(); wireAuth(); }
+function mountSetup(mode) { $("#page").innerHTML = shell(setupPanel(mode)); loadPhotos(); wireSetup(); }
 
 function wireAuth() {
-  $$("[data-tab]").forEach(b => b.onclick = () => mountAuth(b.dataset.tab));
+  $$("[data-tab]").forEach(b => b.onclick = () => {
+    mountAuth(b.dataset.tab);
+    document.getElementById("start").scrollIntoView({ block: "center" });
+  });
 
   const signin = $("#do-signin");
   if (signin) signin.onclick = async () => {
@@ -230,11 +280,15 @@ function wireAuth() {
     sessionStorage.setItem("gp:name", full_name);
     if (!data.session) return toast("Account created. Check your email to confirm, then sign in.");
     mountSetup(pendingJoin() ? "join" : "create");
+    document.getElementById("start").scrollIntoView({ block: "center" });
   };
 }
 
 function wireSetup() {
-  $$("[data-setup]").forEach(b => b.onclick = () => mountSetup(b.dataset.setup));
+  $$("[data-setup]").forEach(b => b.onclick = () => {
+    mountSetup(b.dataset.setup);
+    document.getElementById("start").scrollIntoView({ block: "center" });
+  });
   const remembered = sessionStorage.getItem("gp:name") || "";
   if ($("#c-name") && !$("#c-name").value) $("#c-name").value = remembered;
   if ($("#j-name") && !$("#j-name").value) $("#j-name").value = remembered;
@@ -272,7 +326,11 @@ async function route() {
   if (!CONFIGURED) { document.body.innerHTML = notConfiguredHTML(); return; }
   const res = await loadSession();
   if (res.state === "ready") { location.href = "dashboard.html"; return; }
-  if (res.state === "needs-org") { mountSetup(pendingJoin() ? "join" : "create"); return; }
+  if (res.state === "needs-org") {
+    mountSetup(pendingJoin() ? "join" : "create");
+    document.getElementById("start").scrollIntoView({ block: "center" });
+    return;
+  }
   mountAuth(pendingJoin() || location.hash === "#register" ? "register" : "signin");
 }
 
